@@ -1,0 +1,11 @@
+{
+    "name": "Python 3",
+    "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
+    "postCreateCommand": "pip3 install --user -r requirements.txt",
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/mtg_app/db,target=/workspace/mtg_app/db,type=bind,consistency=cached",
+    ],
+    "remoteUser": "vscode"
+}

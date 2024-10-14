@@ -1,0 +1,4 @@
+duckdb
+mtgsdk
+pandas
+numpy
