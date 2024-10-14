@@ -1,16 +1,12 @@
 import duckdb
 
-# schema
-# primary key: 
-# 
-
 # Connect to DuckDB
-con = duckdb.connect("mtg_cards.duckdb")
+con = duckdb.connect("/workspaces/mtg_app/db/mtg.duckdb")
 
 # Load JSON directly into DuckDB from the file
 con.execute("""
-    CREATE TABLE cards AS 
-    SELECT * FROM read_json_auto('cards.json', maximum_object_size=1000000000);
+    CREATE TABLE cards AS
+    SELECT * FROM read_json_auto('/workspaces/mtg_app/data/src_cards.json', maximum_object_size=1000000000);
 """)
 
 # Query the DuckDB database
