@@ -2,3 +2,4 @@ duckdb
 mtgsdk
 pandas
 numpy
+requests
