@@ -22,3 +22,4 @@ with lzma.open(xz_file_path) as xz_file:
         tar.extractall(path=extract_dir)
 
 print(f"Parquet files extracted to {extract_dir}")
+
