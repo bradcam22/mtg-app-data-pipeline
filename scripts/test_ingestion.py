@@ -12,7 +12,7 @@ db_url = os.getenv("POSTGRES_URL")
 parsed = urlparse(db_url)
 clean_url = f"postgresql://{parsed.username}:{parsed.password}@{parsed.hostname}:{parsed.port}{parsed.path}?sslmode=require"
 
-# Connect to DuckDB
+# Connect to DuckDB (in-memory)
 duck = duckdb.connect(':memory:')
 
 # Create tables in DuckDB from the parquet files
