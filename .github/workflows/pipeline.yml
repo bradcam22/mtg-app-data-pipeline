@@ -34,3 +34,12 @@ jobs:
           docker run --rm \
             -e POSTGRES_URL=$POSTGRES_URL \
             $IMAGE_NAME
+
+      # Send Discord notification
+      - name: Send Discord notification
+        if: always() # This ensures the notification is sent whether the pipeline succeeds or fails
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: '🎲 MTG Pipeline run completed with status: ${{ job.status }}'
