@@ -8,20 +8,12 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 def setup_logs():
-    """Configure logging with both console and file handlers."""
-    os.makedirs('logs', exist_ok=True)
-    
+    """Configure logging with console handler."""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.StreamHandler(),
-            RotatingFileHandler(
-                filename='logs/ingestion.log',
-                maxBytes=10*1024*1024,  # 10MB
-                backupCount=5,
-                encoding='utf-8'
-            )
+            logging.StreamHandler()
         ]
     )
     return logging.getLogger(__name__)

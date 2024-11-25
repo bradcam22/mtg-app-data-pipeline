@@ -1,4 +1,2 @@
 .env
-*.log
-logs/
 .DS_Store

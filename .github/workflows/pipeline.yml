@@ -12,19 +12,19 @@ env:
 # Define jobs
 jobs:
   run-pipeline:
-    runs-on: ubuntu-latest # Uses Ubuntu as the runner OS
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     
     steps:
-      # Check out your repository code
+      # Check out repository code
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # Build the Docker image
+      # Build Docker image
       - name: Build Docker image
         run: docker build -t $IMAGE_NAME .
 
-      # Run the pipeline
+      # Run pipeline
       - name: Run pipeline
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
@@ -35,9 +35,11 @@ jobs:
 
       # Send Discord notification
       - name: Send Discord notification
-        if: always() # This ensures the notification is sent whether the pipeline succeeds or fails
+        if: always()
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          args: '🎲 MTG Pipeline run completed with status: ${{ job.status }}'
+          args: |
+            🎲 MTG Pipeline run completed with status: ${{ job.status }}
+            📋 View run details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
