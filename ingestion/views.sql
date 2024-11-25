@@ -23,3 +23,5 @@ select
 from cards_initial_release
 group by 1
 order by 1;
+
+-- TODO: add indexes
