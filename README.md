@@ -5,7 +5,7 @@ This project maintains a data pipeline that processes Magic: The Gathering card 
 ## Data Flow
 - Source: [mtgjson.com](https://mtgjson.com/)
 - Processing: [DuckDB](https://duckdb.org/) for Parquet file handling
-- Storage: PostgreSQL [Supabase](https://supabase.com/)
+- Storage: [Supabase](https://supabase.com/) PostgreSQL database
 - Optimization: Materialized views for efficient frontend queries
 
 **Scheduling**: Daily updates via GitHub Actions.
@@ -16,5 +16,5 @@ This project leverages dev containers for development. You will need to install 
 ### Environment Configuration
 This project requires the following environment variables:
 - `POSTGRES_URL`: Connection string for the database
-  > **Note**: When using Supabase, remove the `supa=base-pooler.x` parameter from the connection URL. Logic is implemented to handle this in the pipeline. 
-- `DISCORD_WEBHOOK_URL`: URL for the Discord webhook (optional)
+  > **Note**: When using Supabase, remove the `supa=base-pooler.x` parameter from the connection URL. Logic is implemented to handle this in the pipeline.
+- `DISCORD_WEBHOOK_URL`: URL for the Discord webhook for pipeline notifications
