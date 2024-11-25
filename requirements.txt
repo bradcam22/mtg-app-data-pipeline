@@ -1,7 +1,3 @@
 duckdb
-mtgsdk
-pandas
-numpy
-requests
 python-dotenv
 psycopg2
