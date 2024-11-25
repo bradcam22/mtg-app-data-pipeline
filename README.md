@@ -21,4 +21,4 @@ This project leverages dev containers for development. You will need to install 
 ### Environment Configuration
 This project requires the following environment variables:
 - `POSTGRES_URL`: Connection string for the database
-  > **Note**: When using Supabase, remove the `sslmode=require` parameter from the connection URL. Logic is implemented to handle this in the pipeline. 
+  > **Note**: When using Supabase, remove the `supa=base-pooler.x` parameter from the connection URL. Logic is implemented to handle this in the pipeline. 
