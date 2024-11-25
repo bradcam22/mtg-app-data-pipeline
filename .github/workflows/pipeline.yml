@@ -1,0 +1,36 @@
+name: MTG Data Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at 00:00 UTC daily
+  workflow_dispatch: # Allows manual runs from GitHub UI
+  push:
+    branches: [ main ] # Runs when you push to main branch
+
+# Environment variables used by all jobs
+env:
+  IMAGE_NAME: mtg-pipeline
+
+# Define jobs
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest # Uses Ubuntu as the runner OS
+    timeout-minutes: 10
+    
+    steps:
+      # Check out your repository code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME .
+
+      # Run the pipeline
+      - name: Run pipeline
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          docker run --rm \
+            -e POSTGRES_URL=$POSTGRES_URL \
+            $IMAGE_NAME
