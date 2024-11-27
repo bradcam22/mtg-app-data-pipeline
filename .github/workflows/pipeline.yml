@@ -2,14 +2,12 @@ name: MTG Data Pipeline
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs at 00:00 UTC daily
+    - cron: '0 4 * * *' # Runs at 04:00 UTC daily
   workflow_dispatch: # Allows manual runs from GitHub UI
 
-# Environment variables used by all jobs
 env:
   IMAGE_NAME: mtg-pipeline
 
-# Define jobs
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
@@ -41,5 +39,5 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
           args: |
-            🎲 MTG Pipeline run completed with status: ${{ job.status }}
-            📋 View run details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            MTG Pipeline run completed with status: ${{ job.status }}
+            View run details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
