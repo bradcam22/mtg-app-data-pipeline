@@ -1,7 +1,6 @@
 import duckdb
 import os
 import logging
-from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 import psycopg2
@@ -39,6 +38,7 @@ def fetch_parquet_data(duck):
         logger.info("Fetching parquet data...")
         duck.sql("CREATE TABLE sets AS SELECT * FROM read_parquet('https://mtgjson.com/api/v5/parquet/sets.parquet')")
         duck.sql("CREATE TABLE cards AS SELECT * FROM read_parquet('https://mtgjson.com/api/v5/parquet/cards.parquet')")
+        duck.sql("CREATE TABLE card_legalities AS SELECT * FROM read_parquet('https://mtgjson.com/api/v5/parquet/cardLegalities.parquet')")
         logger.info("Parquet data fetched successfully")
     except Exception as e:
         logger.error(f"Error fetching parquet data: {e}")
@@ -55,9 +55,11 @@ def transfer_to_postgres(duck, clean_url):
             
             DROP TABLE IF EXISTS postgres_db.sets CASCADE;
             DROP TABLE IF EXISTS postgres_db.cards CASCADE;
+            DROP TABLE IF EXISTS postgres_db.card_legalities CASCADE;
             
             CREATE TABLE postgres_db.sets AS SELECT * FROM sets;
             CREATE TABLE postgres_db.cards AS SELECT * FROM cards;
+            CREATE TABLE postgres_db.card_legalities AS SELECT * FROM card_legalities;
         """)
         logger.info("Data transferred to Postgres successfully")
     except Exception as e:
