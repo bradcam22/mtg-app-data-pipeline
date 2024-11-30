@@ -1,4 +1,4 @@
-
+-- materialized views
 create materialized view v_atomic_cards as
 with commander_cards as (
   -- fetching cards that are legal in commander and not marked as reprint
@@ -15,7 +15,6 @@ atomic_cards as (
   -- double sided cards will have two rows, one for each side 
     -- for example, there's two rows with name="Wear // Tear"
     -- "faceName" will be unique, either "Wear" or "Tear"
-    -- "side" will be "a" or "b"
   select
     cards.name,
     cards."faceName" as face_name,
@@ -41,10 +40,10 @@ atomic_cards as (
 select * from atomic_cards;
 -- TODO: add indexes
 
-
+-- functions
 drop function if exists get_unique_cards CASCADE;
 drop function if exists get_unique_cards_per_year CASCADE;
-
+drop function if exists get_distinct_color_identities CASCADE;
 
 create function get_unique_cards(color_filter text default null)
 returns table (unique_cards bigint) 
@@ -54,7 +53,6 @@ as $$
   from v_atomic_cards
   where (color_filter is null or color_identity = color_filter);
 $$;
-
 
 create function get_unique_cards_per_year(color_filter text default null)
 returns table (release_year date, unique_cards bigint)
@@ -67,4 +65,13 @@ as $$
   where (color_filter is null or color_identity = color_filter)
   group by release_year
   order by release_year;
+$$;
+
+create function get_distinct_color_identities()
+returns table (color_identity text)
+language sql
+as $$
+    select distinct color_identity
+    from v_atomic_cards
+    order by color_identity;
 $$;
