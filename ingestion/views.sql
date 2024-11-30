@@ -18,11 +18,11 @@ atomic_cards as (
     -- "side" will be "a" or "b"
   select
     cards.name,
-    cards."faceName",
+    cards."faceName" as face_name,
     cards.side,
-    cards."colorIdentity",
-    cards."manaCost",
-    cards."manaValue",
+    cards."colorIdentity" as color_identity,
+    cards."manaCost" as mana_cost,
+    cards."manaValue" as mana_value,
     cards.text,
     cards.supertypes,
     cards.subtypes,
@@ -39,23 +39,32 @@ atomic_cards as (
   group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 )
 select * from atomic_cards;
-
-
-create materialized view v_count_unique_cards as
-select count(distinct name) as unique_cards 
-from v_atomic_cards;
-
-
-create materialized view v_unique_cards_per_year as
-with distinct_cards as (
-	select distinct name, release_date
-	from v_atomic_cards
-)
-select 
-	date_trunc('year', release_date)::date as release_year,
-	count(*) as unique_cards
-from distinct_cards
-group by 1
-order by 1;
-
 -- TODO: add indexes
+
+
+drop function if exists get_unique_cards CASCADE;
+drop function if exists get_unique_cards_per_year CASCADE;
+
+
+create function get_unique_cards(color_filter text default null)
+returns table (unique_cards bigint) 
+language sql
+as $$
+  select count(distinct name) as unique_cards
+  from v_atomic_cards
+  where (color_filter is null or color_identity = color_filter);
+$$;
+
+
+create function get_unique_cards_per_year(color_filter text default null)
+returns table (release_year date, unique_cards bigint)
+language sql
+as $$
+  select 
+      date_trunc('year', release_date)::date as release_year,
+      count(distinct name) as unique_cards
+  from v_atomic_cards
+  where (color_filter is null or color_identity = color_filter)
+  group by release_year
+  order by release_year;
+$$;
